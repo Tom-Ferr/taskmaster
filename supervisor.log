@@ -1,0 +1,38 @@
+2024-08-26 00:30:35,160 CRIT Supervisor is running as root.  Privileges were not dropped because no user is specified in the config file.  If you intend to run as root, you can set user=root in the config file to avoid this message.
+2024-08-26 00:30:35,160 INFO Included extra file "/etc/supervisor/conf.d/teste.conf" during parsing
+2024-08-26 00:30:35,164 INFO RPC interface 'supervisor' initialized
+2024-08-26 00:30:35,164 CRIT Server 'unix_http_server' running without any HTTP authentication checking
+2024-08-26 00:30:35,164 INFO supervisord started with pid 82612
+2024-08-26 00:30:36,166 INFO spawned: 'teste_00' with pid 82615
+2024-08-26 00:30:56,202 INFO success: teste_00 entered RUNNING state, process has stayed up for > than 20 seconds (startsecs)
+2024-08-26 00:31:14,011 INFO waiting for teste_00 to stop
+2024-08-26 00:31:14,011 WARN stopped: teste_00 (terminated by SIGTERM)
+2024-08-26 00:31:27,132 INFO spawned: 'teste_00' with pid 82734
+2024-08-26 00:31:48,034 INFO success: teste_00 entered RUNNING state, process has stayed up for > than 20 seconds (startsecs)
+2024-08-26 00:32:38,074 INFO waiting for teste_00 to stop
+2024-08-26 00:32:38,074 WARN stopped: teste_00 (terminated by SIGTERM)
+2024-08-26 00:32:39,080 INFO spawned: 'teste_00' with pid 82842
+2024-08-26 00:32:59,114 INFO success: teste_00 entered RUNNING state, process has stayed up for > than 20 seconds (startsecs)
+2024-08-26 00:33:49,866 INFO waiting for teste_00 to stop
+2024-08-26 00:33:49,867 WARN stopped: teste_00 (terminated by SIGTERM)
+2024-08-26 00:33:50,869 INFO spawned: 'teste_00' with pid 83039
+2024-08-26 00:33:55,992 INFO success: teste_00 entered RUNNING state, process has stayed up for > than 5 seconds (startsecs)
+2024-08-26 00:35:47,672 WARN received SIGHUP indicating restart request
+2024-08-26 00:35:47,673 INFO waiting for teste_00 to die
+2024-08-26 00:35:47,673 WARN stopped: teste_00 (terminated by SIGTERM)
+2024-08-26 00:35:47,675 CRIT Supervisor is running as root.  Privileges were not dropped because no user is specified in the config file.  If you intend to run as root, you can set user=root in the config file to avoid this message.
+2024-08-26 00:35:47,675 INFO Included extra file "/etc/supervisor/conf.d/teste.conf" during parsing
+2024-08-26 00:35:47,675 INFO RPC interface 'supervisor' initialized
+2024-08-26 00:35:47,676 CRIT Server 'unix_http_server' running without any HTTP authentication checking
+2024-08-26 00:35:47,676 INFO supervisord started with pid 82612
+2024-08-26 00:35:48,678 INFO spawned: 'teste_00' with pid 83372
+2024-08-26 00:35:53,692 INFO success: teste_00 entered RUNNING state, process has stayed up for > than 5 seconds (startsecs)
+2024-08-26 00:37:21,134 INFO waiting for teste_00 to die
+2024-08-26 00:37:21,135 WARN stopped: teste_00 (terminated by SIGTERM)
+2024-08-26 00:38:12,128 CRIT Supervisor is running as root.  Privileges were not dropped because no user is specified in the config file.  If you intend to run as root, you can set user=root in the config file to avoid this message.
+2024-08-26 00:38:12,128 INFO Included extra file "/etc/supervisor/conf.d/teste.conf" during parsing
+2024-08-26 00:38:12,132 INFO RPC interface 'supervisor' initialized
+2024-08-26 00:38:12,132 CRIT Server 'unix_http_server' running without any HTTP authentication checking
+2024-08-26 00:38:12,132 INFO supervisord started with pid 83572
+2024-08-26 00:38:13,134 INFO spawned: 'teste_00' with pid 83573
+2024-08-26 00:38:18,225 INFO success: teste_00 entered RUNNING state, process has stayed up for > than 5 seconds (startsecs)
