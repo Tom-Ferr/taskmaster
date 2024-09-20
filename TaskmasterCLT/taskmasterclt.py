@@ -82,6 +82,24 @@ def restart_command(stdscr, progs):
         data = response.json()
         print_line(stdscr, f"error: group '{data['program']}' not found.")
 
+def status_command(stdscr, progs):
+    url = "http://localhost:4242/status"
+
+    headers = {
+        "Content-Type": "application/json",
+        "User-Agent": "taskmasterclt 1.0"
+    }   
+    try:
+        response = requests.request("POST", url, headers=headers)
+    except:
+        print_line(stdscr, f"error: taskmasterd is offline")
+        return
+    data = response.json()
+    for prog in data.keys():
+        for status, n in data[prog].items():
+            s = "process" if n < 2 else "processes"
+            print_line(stdscr, f"{prog}: {n} {s} {status}")
+
 def shutdown_command(stdscr, progs):
     url = "http://localhost:4242/pid"
 
@@ -176,7 +194,8 @@ valid_commands = {
     "shutdown": shutdown_command,
     "reload": reload_command,
     "update": update_command,
-    "reread": reread_command
+    "reread": reread_command,
+    "status": status_command
 }
 
 def move_cursor_left(y, x, start_x):
