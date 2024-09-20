@@ -90,25 +90,37 @@ if __name__ == "__main__":
     
     @app.route('/restart', methods=['POST'])
     def restart():
+        global confs
+
         json = request.get_json()
         progs = json.get('program').split() 
 
         for prog in progs:
             if not prog in confs["programs"].keys():
                 return jsonify({"Response": "ko", "program":  prog}), 400
-            stop_program(prog, confs, procs)
-            if confs['programs'][prog].get('autorestart', None) == False:
+            autorestart = confs['programs'][prog].get('autorestart', None)
+            if autorestart != None:
+                confs['programs'][prog]['autorestart'] = False
+                stop_program(prog, confs, procs)
                 start_program(prog, confs, procs)
+                confs['programs'][prog]['autorestart'] = autorestart
 
         response = {"Response": "ok"}
         return jsonify(response), 200
     
     @app.route('/status', methods=['POST'])
     def status():
-        json = request.get_json()
-        prog = json.get('program')
+        # json = request.get_json()
+        # prog = json.get('program')
 
-        response = {procs[prog][pid]['name']: get_status(procs[prog][pid]['status']) for pid in procs.get(prog, {}).keys()}
+        response = {}
+        for prog in confs['programs'].keys():
+            status = {}
+            for pid in procs[prog].keys():
+                status[get_status(procs[prog][pid]['status'])] = status.get(get_status(procs[prog][pid]['status']), 0) + 1
+            response[prog] = status
+
+        # response = {procs[prog][pid]['name']: get_status(procs[prog][pid]['status']) for pid in procs.get(prog, {}).keys()}
 
         return jsonify(response), 200
     
