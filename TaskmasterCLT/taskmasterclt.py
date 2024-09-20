@@ -94,6 +94,8 @@ def status_command(stdscr, progs):
     except:
         print_line(stdscr, f"error: taskmasterd is offline")
         return
+    y_old, _ = stdscr.getyx()
+    clean_screen(stdscr, y_old)
     data = response.json()
     for prog in data.keys():
         for status, n in data[prog].items():

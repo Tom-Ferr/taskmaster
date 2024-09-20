@@ -10,5 +10,3 @@ def read_confs():
         print("error found in config.")
         readed = {}
     return readed, err_list
-
-    # ERROR: CANT_REREAD: invalid literal for int() with base 10: '2ss' in section 'program:teste' (file: '/etc/supervisor/conf.d/teste.conf')

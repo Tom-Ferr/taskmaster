@@ -48,16 +48,10 @@ if __name__ == "__main__":
     def sighup_handler(sig, frame):
         global readed
         global confs
-        for name, progs in procs.items():
-            for p in progs.values():
-                p['default'] = False
-            stop_program(name, confs, procs)
-        procs.clear()
-        # readed, _ = read_confs()
-        confs = copy.deepcopy(readed)
-        for prog in confs['programs'].keys():
-            procs[prog] = {}
-            start_program(prog, confs, procs)
+        ret, _ = read_confs()
+        if ret:
+            readed = ret
+        update_confs(confs, procs, readed)
 
     signal.signal(signal.SIGINT, sigint_handler)
     signal.signal(signal.SIGHUP, sighup_handler)
@@ -152,8 +146,17 @@ if __name__ == "__main__":
     
     @app.route('/update', methods=['GET'])
     def update():
-        
-        update_confs(confs, procs, readed)
+        global readed
+        global confs
+        for name, progs in procs.items():
+            for p in progs.values():
+                p['default'] = False
+            stop_program(name, confs, procs)
+        procs.clear()
+        confs = copy.deepcopy(readed)
+        for prog in confs['programs'].keys():
+            procs[prog] = {}
+            start_program(prog, confs, procs)
 
         response = {"Response": "ok"}
         return jsonify(response), 200
