@@ -4,7 +4,7 @@ import fcntl
 
 
 def insert_logs(status, text, confs):
-    log_file = confs.get('taskmaster', {}).get('logfile', './logs/jacare.log')
+    log_file = confs.get('taskmaster', {}).get('logfile', './logs/taskmasterd.log')
     with open(log_file, 'a') as stdout_file:
         data = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         fcntl.flock(stdout_file, fcntl.LOCK_EX)
