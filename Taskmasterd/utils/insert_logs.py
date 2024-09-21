@@ -10,5 +10,5 @@ def insert_logs(status, text, confs):
         fcntl.flock(stdout_file, fcntl.LOCK_EX)
         stdout_file.write(f"{data} {status} {text}\n")
         fcntl.flock(stdout_file, fcntl.LOCK_UN)
-        if status is "WARN" and confs.get('taskmaster', {}).get('email', None):
+        if status is "CRIT" and confs.get('taskmaster', {}).get('email', None):
             send_alert(log_file, confs['taskmaster']['email'], f"{status} {text}")

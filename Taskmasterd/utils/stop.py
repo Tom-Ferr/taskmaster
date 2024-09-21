@@ -28,4 +28,4 @@ def stop_program(prog, confs, procs):
                         insert_logs("INFO", f"success: process {prog}_{pid} stopped", confs)
                         to_stop[pid]['status'] = 'STOPPED'
                     else:
-                        insert_logs("WARN", f"error: unable to stop the process {prog}_{pid}", confs)
+                        insert_logs("CRIT", f"error: unable to stop the process {prog}_{pid}", confs)

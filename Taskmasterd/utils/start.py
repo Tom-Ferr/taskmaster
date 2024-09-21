@@ -51,7 +51,7 @@ def monitor_process(process, prog, confs, procs):
                 if auto_restart == 'unexpected':
                     return_code = process.returncode
                     if return_code not in exit_codes:
-                        insert_logs("WARN", f"process {prog}_{process.pid} terminated unexpectedly", confs)
+                        insert_logs("CRIT", f"process {prog}_{process.pid} terminated unexpectedly", confs)
                         del procs[prog][process.pid]
                         insert_logs("INFO", f"restarting the {prog} group process", confs)
                         start_program(prog, confs, procs, is_restart=True)
@@ -74,7 +74,7 @@ def create_proc(prog, confs, procs, start_retries, start_time, env, lock):
             with lock:
                 procs[prog].update({ret_proc.pid: {'process': ret_proc, 'status': 'STARTING'}})
             ret_proc.wait(timeout=start_time)
-            insert_logs("WARN", f"exited: {prog}_{ret_proc.pid} (exit status {ret_proc.poll()}; not expected)", confs)
+            insert_logs("ERRO", f"exited: {prog}_{ret_proc.pid} (exit status {ret_proc.poll()}; not expected)", confs)
             ret_proc.terminate()
             with lock:
                 del procs[prog][ret_proc.pid]
@@ -86,8 +86,8 @@ def create_proc(prog, confs, procs, start_retries, start_time, env, lock):
                 procs[prog][ret_proc.pid]['name'] = f"{prog}_{ret_proc.pid}"
         monitor_thread = threading.Thread(target=monitor_process, args=(ret_proc, prog, confs, procs), daemon=True)
         monitor_thread.start()
-        break
-    pass
+        return
+    insert_logs("CRIT", f"exited: Unable to upload the {prog} process after {start_retries} attempts", confs)
 
 
 def start_program(prog, confs, procs, is_restart=False):
@@ -106,24 +106,3 @@ def start_program(prog, confs, procs, is_restart=False):
     for i in range(procs_to_start):
         monitor_thread = threading.Thread(target=create_proc, args=(prog, confs, procs, start_retries, start_time, env, lock), daemon=True)
         monitor_thread.start()
-        # for j in range(start_retries + 1):
-        #     try:
-        #         ret_proc = start_process(prog, confs, env)
-        #         insert_logs("INFO", f"spawned: {prog}_{ret_proc.pid} with pid {ret_proc.pid}", confs)
-        #     except Exception as e:
-        #         continue
-        #     try:
-        #         procs[prog].update({ret_proc.pid: {'process': ret_proc, 'status': 'STARTING'}})
-        #         ret_proc.wait(timeout=start_time)
-        #         insert_logs("WARN", f"exited: {prog}_{ret_proc.pid} (exit status {ret_proc.poll()}; not expected)", confs)
-        #         ret_proc.terminate()
-        #         del procs[prog][ret_proc.pid]
-        #         continue
-        #     except subprocess.TimeoutExpired:
-        #         insert_logs("INFO", f"success: {prog}_{ret_proc.pid} entered RUNNING state, process has stayed up for > than {start_time} seconds (starttime)", confs)
-        #         procs[prog][ret_proc.pid]['status'] = ret_proc.poll()
-        #         procs[prog][ret_proc.pid]['name'] = f"{prog}_{ret_proc.pid}"
-        #         pass
-        #     monitor_thread = threading.Thread(target=monitor_process, args=(ret_proc, prog, confs, procs), daemon=True)
-        #     monitor_thread.start()
-        #     break
