@@ -144,28 +144,27 @@ def reload_command(stdscr, progs):
     except:
         print_line(stdscr, f"error: taskmasterd is offline")
         return
-    print_line(stdscr, f"Really restart the remote taskmasterd process y/N?")
-    key = stdscr.getch()
-    if key == 121:
-        json = response.json()
-        pid = json.get('Response')
-        os.kill(pid, signal.SIGHUP)
-        print_line(stdscr, f"Restarted taskmasterd")
+    
+    json = response.json()
+    pid = json.get('Response')
+    os.kill(pid, signal.SIGHUP)
+    print_line(stdscr, f"Restarted taskmasterd")
 
-def reread_command(stdscr, progs):
+def reread_command(stdscr, path):
     url = "http://localhost:4242/reread"
 
+    payload = {"path": path}
     headers = {
         "Content-Type": "application/json",
         "User-Agent": "taskmasterclt 1.0"
     }   
     try:
-        response = requests.request("GET", url, headers=headers)
+        response = requests.request("POST", url, json=payload, headers=headers)
     except:
         print_line(stdscr, f"error: taskmasterd is offline")
         return
     if response.status_code == 200:
-        print_line(stdscr, f"changed")
+        print_line(stdscr, f"readed")
     else:
         json = response.json()
         err_list = json.get('errors')
@@ -178,12 +177,14 @@ def update_command(stdscr, progs):
     headers = {
         "Content-Type": "application/json",
         "User-Agent": "taskmasterclt 1.0"
-    }   
-    try:
-        response = requests.request("GET", url, headers=headers)
-    except:
-        print_line(stdscr, f"error: taskmasterd is offline")
-        return
+    }
+    print_line(stdscr, f"Really restart the remote taskmasterd process y/N?")
+    key = stdscr.getch()
+    if key == 121:  
+        try:
+            response = requests.request("GET", url, headers=headers)
+        except:
+            print_line(stdscr, f"error: taskmasterd is offline")
 
 
 def command_not_found(stdscr, command):

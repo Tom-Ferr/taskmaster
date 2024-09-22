@@ -12,14 +12,36 @@ import signal
 import os
 import sys
 import copy
+import argparse
+
+def parse_arguments():
+    parser = argparse.ArgumentParser(description="Process config file path and no-daemon mode.")
+
+    parser.add_argument('config_path', nargs='?', default='./configs/default.yaml', 
+                        type=str, help="Path to the configuration file")
+
+    parser.add_argument('--no-daemon', action='store_true', help="Run in no-daemon mode")
+
+    return parser.parse_args()
 
 
 if __name__ == "__main__":
 
-    readed, _ = read_confs({})
+    args = parse_arguments()
+    
+    path = args.config_path
+    no_daemon = args.no_daemon
+
+    readed, err_list = read_confs(path, {})
     if not readed:
+        if err_list is list:
+            for e in err_list:
+                print(e.error_text)
+        else:
+            print(err_list)
         sys.exit(1)
-    daemonize()
+    if not no_daemon:
+        daemonize()
     privilege_descalation()
     app = Flask(__name__)
     procs = {}
@@ -43,7 +65,7 @@ if __name__ == "__main__":
     def sighup_handler(sig, frame):
         global readed
         global confs
-        ret, _ = read_confs(confs)
+        ret, _ = read_confs(path, confs)
         if ret:
             insert_logs("WARN", "the configuration file was reread", confs)
             readed = ret
@@ -122,21 +144,32 @@ if __name__ == "__main__":
         response = {"Response": pid}
         return jsonify(response), 200
     
-    @app.route('/reread', methods=['GET'])
+    @app.route('/reread', methods=['POST'])
     def reread():
         global readed
         global confs
+        global path
 
-        ret, err_list = read_confs(confs)
+        json = request.get_json()
+        new_path = json.get('path')
+
+        if not new_path:
+            new_path = path
+
+        ret, err_list = read_confs(new_path, confs)
         
         if ret:
-            insert_logs("WARN", "the configuration file was reread", confs)
+            insert_logs("WARN", "the configuration file was rereaded", confs)
+            path = new_path
             readed = ret
             response = {"Response":"ok"}
         else:
             err = []
-            for e in err_list:
-                err.append(e.error_text)
+            if err_list is list:
+                for e in err_list:
+                    err.append(e.error_text)
+            else:
+                err.append(err_list)
             response = {"errors": err}
             return jsonify(response), 502
 
