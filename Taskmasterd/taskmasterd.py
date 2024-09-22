@@ -14,18 +14,12 @@ import sys
 import copy
 
 
-# for progs in procs.values():
-#     i = 0
-#     for pid in progs.values(): 
-#         {f"{progs}_{i}": pid}
-#         i += 1
-
 if __name__ == "__main__":
 
-    readed, _ = read_confs()
+    readed, _ = read_confs({})
     if not readed:
         sys.exit(1)
-    # daemonize()
+    daemonize()
     privilege_descalation()
     app = Flask(__name__)
     procs = {}
@@ -43,13 +37,15 @@ if __name__ == "__main__":
         for progs in procs.values():
             for p in progs.values(): 
                 p['process'].terminate()
+        insert_logs("CRIT", "the taskmasterd is shuting down", confs)
         sys.exit()
 
     def sighup_handler(sig, frame):
         global readed
         global confs
-        ret, _ = read_confs()
+        ret, _ = read_confs(confs)
         if ret:
+            insert_logs("WARN", "the configuration file was reread", confs)
             readed = ret
         update_confs(confs, procs, readed)
 
@@ -129,10 +125,12 @@ if __name__ == "__main__":
     @app.route('/reread', methods=['GET'])
     def reread():
         global readed
+        global confs
 
-        ret, err_list = read_confs()
+        ret, err_list = read_confs(confs)
         
         if ret:
+            insert_logs("WARN", "the configuration file was reread", confs)
             readed = ret
             response = {"Response":"ok"}
         else:
@@ -158,6 +156,7 @@ if __name__ == "__main__":
             procs[prog] = {}
             start_program(prog, confs, procs)
 
+        insert_logs("WARN", "The processes have been updated", confs)
         response = {"Response": "ok"}
         return jsonify(response), 200
 
