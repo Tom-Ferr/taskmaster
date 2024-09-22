@@ -21,6 +21,10 @@ def request_start(progs):
 
 
 def start_command(stdscr, progs):
+    if not progs:
+        print_line(stdscr, f"It is necessary to pass the name of the program")
+        return
+
     try:
         response = request_start(progs)
     except:
@@ -47,6 +51,9 @@ def request_stop(progs):
 
 
 def stop_command(stdscr, progs):
+    if not progs:
+        print_line(stdscr, f"It is necessary to pass the name of the program")
+        return
     try:
         response = request_stop(progs)
     except:
@@ -71,6 +78,9 @@ def request_restart(progs):
     return requests.request("POST", url, json=payload, headers=headers)
 
 def restart_command(stdscr, progs):
+    if not progs:
+        print_line(stdscr, f"It is necessary to pass the name of the program")
+        return
     try:
         response = request_restart(progs)
     except:
