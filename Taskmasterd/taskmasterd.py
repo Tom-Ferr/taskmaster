@@ -70,7 +70,6 @@ if __name__ == "__main__":
             insert_logs("WARN", "the configuration file was reread", confs)
             readed = ret
         update_confs(confs, procs, readed)
-        confs = readed
 
     signal.signal(signal.SIGINT, sigint_handler)
     signal.signal(signal.SIGHUP, sighup_handler)
