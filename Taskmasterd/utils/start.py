@@ -59,6 +59,8 @@ def monitor_process(process, prog, confs, procs):
                     del procs[prog][process.pid]
                     insert_logs("INFO", f"restarting the {prog} group process", confs)
                     start_program(prog, confs, procs, is_restart=True)
+                elif auto_restart is False and process.returncode not in exit_codes:
+                    insert_logs("CRIT", f"process {prog}_{process.pid} terminated unexpectedly", confs)
             break
     time.sleep(1)
 
