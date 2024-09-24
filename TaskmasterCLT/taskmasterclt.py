@@ -148,7 +148,7 @@ def reload_command(stdscr, progs):
     json = response.json()
     pid = json.get('Response')
     os.kill(pid, signal.SIGHUP)
-    print_line(stdscr, f"Restarted taskmasterd")
+    print_line(stdscr, f"Reloaded taskmasterd")
 
 def reread_command(stdscr, path):
     url = "http://localhost:4242/reread"
@@ -183,6 +183,7 @@ def update_command(stdscr, progs):
     if key == 121:  
         try:
             response = requests.request("GET", url, headers=headers)
+            print_line(stdscr, f"Restarted taskmasterd")
         except:
             print_line(stdscr, f"error: taskmasterd is offline")
 

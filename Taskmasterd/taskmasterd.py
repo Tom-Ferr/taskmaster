@@ -119,8 +119,6 @@ if __name__ == "__main__":
     
     @app.route('/status', methods=['POST'])
     def status():
-        # json = request.get_json()
-        # prog = json.get('program')
 
         response = {}
         for prog in confs['programs'].keys():
@@ -128,8 +126,6 @@ if __name__ == "__main__":
             for pid in procs[prog].keys():
                 status[get_status(procs[prog][pid]['status'])] = status.get(get_status(procs[prog][pid]['status']), 0) + 1
             response[prog] = status
-
-        # response = {procs[prog][pid]['name']: get_status(procs[prog][pid]['status']) for pid in procs.get(prog, {}).keys()}
 
         return jsonify(response), 200
     
