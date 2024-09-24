@@ -12,6 +12,16 @@ standard_structure = {
                 "level_type": str, 
                 "is_required" : False
             },
+            "uid" : {
+                "level_type": str, 
+                "is_required" : False,
+                "check_func": checks_field_functions["uid"]
+            },
+            "gid" : {
+                "level_type": str, 
+                "is_required" : False,
+                "check_func": checks_field_functions["gid"]
+            },
         },
         "level_type": dict, 
         "is_required" : False,

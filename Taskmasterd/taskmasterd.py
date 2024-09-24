@@ -34,20 +34,17 @@ if __name__ == "__main__":
 
     readed, err_list = read_confs(path, {})
     if not readed:
-        if err_list is list:
-            for e in err_list:
-                print(e.error_text)
-        else:
+        if type(err_list) is str:
             print(err_list)
         sys.exit(1)
     if not no_daemon:
         daemonize()
-    privilege_descalation()
+    confs = copy.deepcopy(readed)
+    privilege_descalation(confs)
     app = Flask(__name__)
     procs = {}
 
 
-    confs = copy.deepcopy(readed)
     insert_logs("INFO", f"taskmasterd started with pid {os.getpid()}", confs)
 
     for prog in confs['programs'].keys():
@@ -165,7 +162,7 @@ if __name__ == "__main__":
             response = {"Response":"ok"}
         else:
             err = []
-            if err_list is list:
+            if type(err_list) is list:
                 for e in err_list:
                     err.append(e.error_text)
             else:

@@ -1,7 +1,12 @@
 import pwd
 import grp
 import os
-def privilege_descalation(uid_name='user', gid_name='user'):
+from utils.insert_logs import insert_logs
+
+def privilege_descalation(confs):
+    
+    uid_name = confs.get("taskmaster", {}).get("uid", "user")
+    gid_name = confs.get("taskmaster", {}).get("gid", "user")
 
     if os.geteuid() != 0:
         return
@@ -15,3 +20,4 @@ def privilege_descalation(uid_name='user', gid_name='user'):
     os.setuid(uid)
 
     os.umask(0o077)
+   

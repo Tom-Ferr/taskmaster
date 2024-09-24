@@ -1,5 +1,4 @@
-taskmaster:
-  logfile: "./logs/jacare.log"
+
 programs:
   nginx:
     cmd: "/home/user/Desktop/taskmaster/exec_teste/teste"

@@ -1,6 +1,8 @@
 from utils.CheckConfig.utils.classes.LevelSpec import LevelSpec
 from utils.CheckConfig.utils.classes.DescriptionLevelError import DescriptionLevelError
 from utils.sigs import sigs
+import grp
+import pwd
 import os
 
 #VERIFICACOES PARA CAMPOS ESPECIFICOS
@@ -71,6 +73,20 @@ def check_logfile_field(CheckConfig, path):
         CheckConfig.errors_tests_list.append(DescriptionLevelError(CheckConfig.levels.get_level_string(), f"The file '{path}' was not found."))
 
 
+def check_uid_field(CheckConfig, uid):
+    try :
+        pwd.getpwnam(uid).pw_uid
+    except:
+        CheckConfig.errors_tests_list.append(DescriptionLevelError(CheckConfig.levels.get_level_string(), f"The 'uid' not found."))
+
+
+def check_gid_field(CheckConfig, gid):
+    try :
+        grp.getgrnam(gid).gr_gid
+    except:
+        CheckConfig.errors_tests_list.append(DescriptionLevelError(CheckConfig.levels.get_level_string(), f"The 'gid' not found."))
+
+
 checks_field_functions = {
     "programs" : check_programs_field,
     "numprocs" : check_numprocs_field,
@@ -82,5 +98,7 @@ checks_field_functions = {
     "stopsignal": check_stopsignal_field,
     "stoptime": check_stoptime_field,
     "workingdir": check_workingdir_field,
-    "logfile": check_logfile_field
+    "logfile": check_logfile_field,
+    "uid": check_uid_field,
+    "gid": check_gid_field
 }
