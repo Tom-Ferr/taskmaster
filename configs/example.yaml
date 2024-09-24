@@ -1,14 +1,16 @@
-
+taskmaster:
+  email: "davimoreira2010@hotmail.com"
+  uid: "user"
+  gid: "user"
 programs:
-  nginx:
-    cmd: "/home/user/Desktop/taskmaster/exec_teste/teste"
-    numprocs: 5
+  teste:
+    cmd: "sleep 10"
+    numprocs: 1
     umask: 022
     workingdir: /home/user/Desktop/taskmaster
     autostart: true
     autorestart: false
     exitcodes:
-      - 0
       - 2
     startretries: 3
     starttime: 5
